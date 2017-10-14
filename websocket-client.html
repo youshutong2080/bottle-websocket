@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-theme.css">
+
+    <title>Websocket</title>
+    <style>
+        #msg {
+            height: 200px;
+            border: 1px solid red;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3 class="text-center text-info">Websocket 日志监控</h3>
+    </div>
+    <br>
+
+    <div class="container-fluid" id="msg"></div>
+    <script>
+    $(document).ready(function() {
+        if (!window.WebSocket) {
+            if (window.MozWebSocket) {
+                window.WebSocket = window.MozWebSocket;
+            } else {
+                $('#msg').prepend("<p>你的浏览器不支持websocket</p>");
+            }
+        }
+        ws = new WebSocket('ws://localhost:8080/websocket/');
+        ws.onopen = function(evt) {
+            console.log('连接成功...');
+            $("#msg").css('border', "2px solid green");
+        };
+        ws.onmessage = function(evt) {
+            $('#msg').prepend(evt.data + '<br>');
+        };
+    });
+</script>
+</body>
+</html>
